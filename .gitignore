@@ -3,24 +3,3 @@
 
 # Ignorar archivos de configuración
 .env
-
-# Archivos de Python compilados
-__pycache__/
-*.pyc
-*.pyo
-
-# Archivos de configuración de IDE (ej. VS Code)
-.vscode/
-.idea/
-
-# Archivos de log
-*.log
-
-# Ignorar directorios de trabajo, si existen
-qml/
-services/
-workers/
-
-# Otros archivos temporales o secretos
-*.db
-*.sqlite
