@@ -10,37 +10,39 @@ Esta version ya incluye interfaz moderna y progreso en tiempo real.
 
 ## Descargas listas (usuario final)
 
-Si solo quieres instalar y usar la app:
+Si solo quieres instalar y usar la app, descarga uno de estos archivos:
 
-1. **Linux AppImage (recomendado):**  
-   `dist/VidFlow-0.3.0.AppImage`
+1. **Windows (.exe):**  
+   [Descargar VidFlow.exe](dist/VidFlow.exe)
 2. **Linux Debian/Ubuntu (.deb):**  
-   `dist/vidflow_0.3.0_amd64.deb`
-3. **Windows portable (.zip con .exe):**  
-   `dist/VidFlow-Windows-Portable-0.3.0.zip`
+   [Descargar VidFlow.deb](dist/VidFlow.deb)
+3. **Linux AppImage (portatil):**  
+   [Descargar VidFlow.AppImage](dist/VidFlow.AppImage)
+4. **Windows portable (.zip con .exe):**  
+   [Descargar VidFlow-Windows-Portable-0.3.0.zip](dist/VidFlow-Windows-Portable-0.3.0.zip)
 
 ### Importante para Windows
 
-- Dentro del `.zip` abre: `win-unpacked/VidFlow.exe`
-- No ejecutes el `.exe` pequeño `VidFlow Setup 0.3.0.exe` generado en Linux para distribucion final; para instalador NSIS real se recomienda build en Windows (o Linux con `wine` correctamente instalado).
+- Si descargaste `VidFlow.exe`, ejecuta ese archivo para instalar.
+- Si descargaste el `.zip`, extrae y abre `win-unpacked/VidFlow.exe`.
 
 ## Instalacion para personas no tecnicas
 
 ### Linux (AppImage)
 
-1. Descarga `VidFlow-0.3.0.AppImage`.
+1. Descarga `VidFlow.AppImage`.
 2. Dale permiso de ejecucion:
    ```bash
-   chmod +x VidFlow-0.3.0.AppImage
+   chmod +x VidFlow.AppImage
    ```
 3. Haz doble clic o ejecútalo.
 
 ### Linux (Debian/Ubuntu)
 
-1. Descarga `vidflow_0.3.0_amd64.deb`.
+1. Descarga `VidFlow.deb`.
 2. Instala con doble clic o terminal:
    ```bash
-   sudo apt install ./vidflow_0.3.0_amd64.deb
+   sudo apt install ./VidFlow.deb
    ```
 
 ### Windows (Portable)
@@ -49,6 +51,12 @@ Si solo quieres instalar y usar la app:
 2. Extrae todo el contenido.
 3. Entra a `win-unpacked`.
 4. Ejecuta `VidFlow.exe`.
+
+### Windows (Instalador .exe)
+
+1. Descarga `VidFlow.exe`.
+2. Haz doble clic en `VidFlow.exe`.
+3. Sigue el asistente de instalacion.
 
 ## Uso basico
 
@@ -114,4 +122,3 @@ backend/    -> API local FastAPI + yt-dlp
 resources/  -> iconos, ffmpeg y backend embebido
 dist/       -> artefactos listos para distribuir
 ```
-
