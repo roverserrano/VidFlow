@@ -1,28 +1,9 @@
-import sys
-from pathlib import Path
+from __future__ import annotations
 
-from PySide6.QtGui import QGuiApplication
-from PySide6.QtQml import QQmlApplicationEngine
+import uvicorn
 
-from bridge import AppBridge
-
-
-def main():
-    app = QGuiApplication(sys.argv)
-
-    engine = QQmlApplicationEngine()
-    bridge = AppBridge()
-
-    engine.rootContext().setContextProperty("appBridge", bridge)
-
-    qml_file = Path(__file__).resolve().parent / "qml" / "Main.qml"
-    engine.load(str(qml_file))
-
-    if not engine.rootObjects():
-        sys.exit(-1)
-
-    sys.exit(app.exec())
+from backend.config import backend_host, backend_port
 
 
 if __name__ == "__main__":
-    main()
+    uvicorn.run("backend.main:app", host=backend_host(), port=backend_port(), reload=False)

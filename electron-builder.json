@@ -1,0 +1,44 @@
+{
+  "appId": "com.vidflow.desktop",
+  "productName": "VidFlow",
+  "directories": {
+    "output": "dist",
+    "buildResources": "build/installer-assets"
+  },
+  "files": [
+    "electron/**/*",
+    "renderer/dist/**/*",
+    "backend/**/*",
+    "package.json"
+  ],
+  "extraResources": [
+    {
+      "from": "resources/bin",
+      "to": "bin",
+      "filter": ["**/*"]
+    },
+    {
+      "from": "resources/python",
+      "to": "python",
+      "filter": ["**/*"]
+    }
+  ],
+  "win": {
+    "target": ["nsis"],
+    "icon": "resources/icons/icon.ico",
+    "signAndEditExecutable": false
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true
+  },
+  "linux": {
+    "target": ["AppImage", "deb"],
+    "icon": "resources/icons",
+    "category": "Utility",
+    "maintainer": "VidFlow Team <support@vidflow.local>"
+  },
+  "publish": null
+}
