@@ -1,49 +1,80 @@
 # VidFlow
 
-VidFlow es una aplicacion desktop para descargar video y audio desde YouTube, TikTok y Facebook. La nueva arquitectura separa Electron/React para la interfaz y FastAPI + `yt-dlp` para el backend local.
+VidFlow es una app de escritorio para descargar video o audio desde:
 
-## Estado
+- YouTube
+- TikTok
+- Facebook
 
-MVP en refactor completo:
+Esta version ya incluye interfaz moderna y progreso en tiempo real.
 
-- Electron controla ventana, IPC seguro, dialogos del sistema y notificaciones nativas.
-- React renderiza descarga, historial, ajustes, toasts y barra de estado.
-- FastAPI expone metadata, descargas, progreso SSE, historial y configuracion persistente.
-- `yt-dlp` y `ffmpeg` son la base de descarga, fusion y extraccion.
-- `electron-builder` queda preparado para NSIS en Windows y AppImage/.deb en Linux.
+## Descargas listas (usuario final)
 
-## Estructura
+Si solo quieres instalar y usar la app:
 
-```text
-VidFlow/
-├── electron/
-│   ├── main.js
-│   ├── preload.js
-│   ├── ipc/
-│   └── services/
-├── renderer/
-│   ├── index.html
-│   ├── vite.config.js
-│   └── src/
-├── backend/
-│   ├── main.py
-│   ├── api/
-│   ├── downloader/
-│   ├── models/
-│   ├── services/
-│   └── utils/
-├── resources/
-│   ├── bin/
-│   ├── icons/
-│   └── python/
-├── tests/
-├── package.json
-├── electron-builder.json
-├── pyproject.toml
-└── requirements.txt
-```
+1. **Linux AppImage (recomendado):**  
+   `dist/VidFlow-0.3.0.AppImage`
+2. **Linux Debian/Ubuntu (.deb):**  
+   `dist/vidflow_0.3.0_amd64.deb`
+3. **Windows portable (.zip con .exe):**  
+   `dist/VidFlow-Windows-Portable-0.3.0.zip`
 
-## Desarrollo
+### Importante para Windows
+
+- Dentro del `.zip` abre: `win-unpacked/VidFlow.exe`
+- No ejecutes el `.exe` pequeño `VidFlow Setup 0.3.0.exe` generado en Linux para distribucion final; para instalador NSIS real se recomienda build en Windows (o Linux con `wine` correctamente instalado).
+
+## Instalacion para personas no tecnicas
+
+### Linux (AppImage)
+
+1. Descarga `VidFlow-0.3.0.AppImage`.
+2. Dale permiso de ejecucion:
+   ```bash
+   chmod +x VidFlow-0.3.0.AppImage
+   ```
+3. Haz doble clic o ejecútalo.
+
+### Linux (Debian/Ubuntu)
+
+1. Descarga `vidflow_0.3.0_amd64.deb`.
+2. Instala con doble clic o terminal:
+   ```bash
+   sudo apt install ./vidflow_0.3.0_amd64.deb
+   ```
+
+### Windows (Portable)
+
+1. Descarga `VidFlow-Windows-Portable-0.3.0.zip`.
+2. Extrae todo el contenido.
+3. Entra a `win-unpacked`.
+4. Ejecuta `VidFlow.exe`.
+
+## Uso basico
+
+1. Abre VidFlow.
+2. Pega una URL de YouTube, TikTok o Facebook.
+3. Pulsa **Pegar y analizar** o **Analizar**.
+4. Elige formato:
+   - Video (MP4)
+   - Audio (MP3/M4A/OGG)
+5. Pulsa **Descargar**.
+
+## Estados y mensajes
+
+- La barra de progreso muestra porcentaje, velocidad y tiempo restante.
+- Al terminar, la app guarda en el historial.
+- Si hay errores, muestra mensajes legibles para reintentar.
+
+## Para desarrollo (equipo tecnico)
+
+### Requisitos
+
+- Python 3.11+
+- Node.js 20+
+- npm
+
+### Ejecutar en local
 
 ```bash
 python3 -m venv .venv
@@ -52,45 +83,35 @@ npm install
 npm run dev
 ```
 
-El comando `npm run dev` levanta Vite y abre Electron. Electron inicia el backend FastAPI local en `127.0.0.1:8716`.
-
-Para ejecutar solo el backend:
+### Tests
 
 ```bash
-.venv/bin/python main.py
+npm test
 ```
 
-## Flujo De Descarga
+### Builds
 
-1. El usuario pega una URL y pulsa `Pegar y analizar` o `Analizar`.
-2. La UI llama al backend local por IPC/HTTP.
-3. El backend detecta plataforma y usa el downloader correspondiente.
-4. `yt-dlp` obtiene metadata, miniatura, duracion y formatos.
-5. El usuario elige video o audio y calidad/formato.
-6. El backend descarga con `yt-dlp`, fusiona con `ffmpeg` y emite progreso por SSE.
-7. La UI actualiza porcentaje, velocidad, ETA y estado.
-8. Al completar, se registra historial y Electron muestra notificacion nativa.
-
-## Empaquetado
+Linux:
 
 ```bash
 npm run package:linux
+```
+
+Windows (instalador NSIS):
+
+```bash
 npm run package:win
 ```
 
-`package:linux` genera primero el backend embebido con PyInstaller y luego crea AppImage + `.deb`. El backend queda en `resources/python/linux/vidflow-backend` y Electron lo usa automaticamente cuando la app esta empaquetada.
+> En Linux, `package:win` requiere `wine` para completar instalador.
 
-Para Windows, ejecuta `npm run package:win` desde Windows para generar NSIS. Desde Linux se requiere `wine` para completar el instalador NSIS.
+## Estructura del proyecto (resumen)
 
-`electron-builder` incluye `resources/bin` y `resources/python` como recursos extra. Para builds finales de cada plataforma coloca ahi los binarios correspondientes de `ffmpeg` y el backend Python embebido.
-
-## Pruebas
-
-```bash
-npm run test:backend
-npm run test:renderer
+```text
+electron/   -> proceso principal, preload e IPC
+renderer/   -> interfaz React
+backend/    -> API local FastAPI + yt-dlp
+resources/  -> iconos, ffmpeg y backend embebido
+dist/       -> artefactos listos para distribuir
 ```
 
-## Configuracion Persistente
-
-La configuracion se guarda como JSON en el directorio de usuario mediante `platformdirs`. Incluye carpeta de destino, tema, formato de audio y nivel de logs.
