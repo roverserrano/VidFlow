@@ -1,5 +1,5 @@
 const path = require("node:path");
-const { app, BrowserWindow, nativeTheme } = require("electron");
+const { app, BrowserWindow, dialog, nativeTheme } = require("electron");
 
 const { createBackendProcess } = require("./services/backend-process");
 const { registerAppIpc } = require("./ipc/app.ipc");
@@ -48,7 +48,17 @@ app.whenReady().then(async () => {
   registerDownloadIpc({ backend });
   registerFilesystemIpc({ app });
 
-  await backend.start();
+  try {
+    await backend.start();
+  } catch (error) {
+    console.error("No se pudo iniciar el backend local:", error);
+    dialog.showErrorBox(
+      "VidFlow no pudo iniciar",
+      "No se pudo iniciar el backend local. Esto suele pasar cuando el instalador fue generado para otro sistema o falta el runtime empaquetado."
+    );
+    app.quit();
+    return;
+  }
   createWindow();
 
   app.on("activate", () => {
@@ -67,4 +77,3 @@ app.on("window-all-closed", () => {
 app.on("before-quit", () => {
   backend.stop();
 });
-

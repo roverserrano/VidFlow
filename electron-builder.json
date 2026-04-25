@@ -25,6 +25,7 @@
   ],
   "win": {
     "target": ["nsis"],
+    "artifactName": "${productName}.${ext}",
     "icon": "resources/icons/icon.ico",
     "signAndEditExecutable": false
   },
@@ -36,6 +37,7 @@
   },
   "linux": {
     "target": ["AppImage", "deb"],
+    "artifactName": "${productName}.${ext}",
     "icon": "resources/icons",
     "category": "Utility",
     "maintainer": "VidFlow Team <support@vidflow.local>"

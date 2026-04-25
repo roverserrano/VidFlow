@@ -40,6 +40,9 @@ Desde ese momento, los enlaces de arriba descargarán directamente los instalado
 
 - Si descargaste `VidFlow.exe`, ejecuta ese archivo para instalar.
 - Si descargaste el `.zip`, extrae y abre `win-unpacked/VidFlow.exe`.
+- El instalador de Windows debe ser generado en Windows (`npm run package:win`) para incluir correctamente el backend embebido.
+- Si aparece SmartScreen ("Windows protegió su PC"), usa **Mas informacion > Ejecutar de todas formas**.
+- Para eliminar esa advertencia de forma definitiva, la app debe publicarse firmada con certificado de codigo.
 
 ## Instalacion para personas no tecnicas
 
@@ -55,7 +58,11 @@ Desde ese momento, los enlaces de arriba descargarán directamente los instalado
 ### Linux (Debian/Ubuntu)
 
 1. Descarga `VidFlow.deb`.
-2. Instala con doble clic o terminal:
+2. Da permiso de lectura para evitar warning de `apt`:
+   ```bash
+   chmod 644 ~/Descargas/VidFlow.deb
+   ```
+3. Instala con doble clic o terminal:
    ```bash
    sudo apt install ./VidFlow.deb
    ```
@@ -126,7 +133,7 @@ Windows (instalador NSIS):
 npm run package:win
 ```
 
-> En Linux, `package:win` requiere `wine` para completar instalador.
+> El build de Windows debe ejecutarse en Windows para evitar instaladores defectuosos.
 
 ## Estructura del proyecto (resumen)
 
