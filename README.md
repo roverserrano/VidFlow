@@ -13,13 +13,28 @@ Esta version ya incluye interfaz moderna y progreso en tiempo real.
 Si solo quieres instalar y usar la app, descarga uno de estos archivos:
 
 1. **Windows (.exe):**  
-   [Descargar VidFlow.exe](dist/VidFlow.exe)
+   [Descargar VidFlow.exe](https://github.com/roverserrano/VidFlow/releases/latest/download/VidFlow.exe)
 2. **Linux Debian/Ubuntu (.deb):**  
-   [Descargar VidFlow.deb](dist/VidFlow.deb)
+   [Descargar VidFlow.deb](https://github.com/roverserrano/VidFlow/releases/latest/download/VidFlow.deb)
 3. **Linux AppImage (portatil):**  
-   [Descargar VidFlow.AppImage](dist/VidFlow.AppImage)
+   [Descargar VidFlow.AppImage](https://github.com/roverserrano/VidFlow/releases/latest/download/VidFlow.AppImage)
 4. **Windows portable (.zip con .exe):**  
-   [Descargar VidFlow-Windows-Portable-0.3.0.zip](dist/VidFlow-Windows-Portable-0.3.0.zip)
+   [Descargar VidFlow-Windows-Portable-0.3.0.zip](https://github.com/roverserrano/VidFlow/releases/latest/download/VidFlow-Windows-Portable-0.3.0.zip)
+
+> Nota: estos enlaces funcionan cuando los archivos fueron subidos como **assets** en GitHub Releases con esos mismos nombres.
+
+### Publicar archivos de descarga (mantenedor)
+
+1. Ve a `GitHub > VidFlow > Releases > Draft a new release`.
+2. Crea un tag (ejemplo: `v0.3.1`).
+3. Arrastra y suelta estos archivos:
+   - `VidFlow.exe`
+   - `VidFlow.deb`
+   - `VidFlow.AppImage`
+   - `VidFlow-Windows-Portable-0.3.0.zip`
+4. Publica el release.
+
+Desde ese momento, los enlaces de arriba descargarán directamente los instaladores.
 
 ### Importante para Windows
 
