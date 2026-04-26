@@ -78,4 +78,6 @@ def test_tiktok_quality_selector_is_strict_h264():
     options = build_quality_options(raw)
     assert options
     assert "format_id*=h264" in options[0].selector
-    assert "best[ext=mp4]/best" in options[0].selector
+    assert not options[0].selector.endswith("/best")
+    assert "/best[ext=mp4]/best" not in options[0].selector
+    assert "vcodec!*=hevc" in options[0].selector

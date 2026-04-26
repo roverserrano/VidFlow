@@ -9,7 +9,7 @@ from backend.config import project_root
 
 def _candidate_names(name: str) -> list[str]:
     if os.name == "nt" and not name.endswith(".exe"):
-        return [f"{name}.exe", name]
+        return [f"{name}.exe", f"{name}.cmd", f"{name}.bat"]
     return [name]
 
 
@@ -42,4 +42,3 @@ def dependency_versions() -> dict[str, str | None]:
         "ffmpeg": resolve_tool("ffmpeg", "VIDFLOW_FFMPEG"),
         "yt-dlp": resolve_tool("yt-dlp", "VIDFLOW_YTDLP"),
     }
-

@@ -102,11 +102,11 @@ def _tiktok_selector_for_height(height: int) -> str:
         f"best[height<={height}][ext=mp4][format_id*=h264][acodec^=mp4a]/"
         f"best[height<={height}][ext=mp4][vcodec^=avc1][acodec^=mp4a]/"
         f"best[height<={height}][ext=mp4][vcodec^=h264][acodec^=mp4a]/"
-        f"best[height<={height}][ext=mp4][acodec^=mp4a]/"
+        f"best[height<={height}][ext=mp4][vcodec!*=av01][vcodec!*=vp9][vcodec!*=hvc1][vcodec!*=hev1][vcodec!*=hevc][vcodec!*=h265][vcodec!*=dvh1][vcodec!*=dvhe]/"
         f"best[ext=mp4][format_id*=h264][acodec^=mp4a]/"
         "best[ext=mp4][vcodec^=avc1][acodec^=mp4a]/"
-        "best[ext=mp4][acodec^=mp4a]/"
-        "best[ext=mp4]/best"
+        "best[ext=mp4][vcodec^=h264][acodec^=mp4a]/"
+        "best[ext=mp4][vcodec!*=av01][vcodec!*=vp9][vcodec!*=hvc1][vcodec!*=hev1][vcodec!*=hevc][vcodec!*=h265][vcodec!*=dvh1][vcodec!*=dvhe]"
     )
 
 

@@ -125,3 +125,5 @@ def test_tiktok_download_options_force_h264_selector():
 
     assert "format_id*=h264" in options["format"]
     assert options["format"].startswith("best[height<=720]")
+    assert not options["format"].endswith("/best")
+    assert "/best[ext=mp4]/best" not in options["format"]
