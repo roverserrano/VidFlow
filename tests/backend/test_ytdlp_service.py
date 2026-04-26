@@ -80,3 +80,26 @@ def test_audio_download_options_extract_mp3():
     assert options["format"] == "bestaudio/best"
     assert options["postprocessors"][0]["preferredcodec"] == "mp3"
     assert options["postprocessors"][0]["preferredquality"] == "192"
+
+
+def test_video_download_options_without_ffmpeg_use_progressive_selector():
+    service = YtDlpService()
+    request = DownloadRequest(
+        url="https://youtu.be/demo",
+        title="Demo",
+        download_type=DownloadType.VIDEO,
+        resolution="1080p",
+        output_dir="/tmp",
+    )
+
+    options = service._download_options(
+        request=request,
+        platform=Platform.YOUTUBE,
+        output_template="/tmp/demo.%(ext)s",
+        ffmpeg=None,
+        progress_hook=lambda data: None,
+    )
+
+    assert options["format"].startswith("best[height<=1080]")
+    assert "acodec^=mp4a" in options["format"]
+    assert "merge_output_format" not in options

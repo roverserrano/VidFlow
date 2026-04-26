@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import math
+import re
 import subprocess
 from pathlib import Path
 from typing import Callable
@@ -19,7 +20,11 @@ from backend.models import (
 )
 from backend.models.errors import VidFlowError, humanize_download_error
 from backend.services.ffmpeg_service import resolve_tool
-from backend.services.format_selector import build_quality_options, default_video_selector
+from backend.services.format_selector import (
+    build_quality_options,
+    default_video_selector,
+    progressive_video_selector,
+)
 from backend.services.storage_service import ensure_directory, find_created_file
 from backend.utils.filenames import build_download_basename
 from backend.utils.formatting import format_duration, format_eta, format_speed, format_bytes
@@ -36,6 +41,17 @@ CancelCheck = Callable[[], bool]
 
 
 class YtDlpService:
+    def _parse_requested_height(self, resolution: str | None) -> int | None:
+        if not resolution:
+            return None
+        match = re.search(r"(\d{3,4})", str(resolution))
+        if not match:
+            return None
+        try:
+            return int(match.group(1))
+        except ValueError:
+            return None
+
     def _normalize_duration(self, value) -> int | None:
         try:
             if value in (None, "", "none"):
@@ -168,6 +184,42 @@ class YtDlpService:
             return fallback
         return file_path
 
+    def _ensure_h264_aac_mp4(self, file_path: Path, ffmpeg: str | None) -> Path:
+        if not ffmpeg:
+            return file_path
+
+        converted = file_path.with_name(f"{file_path.stem}.vf_compat.mp4")
+        ok = self._run_ffmpeg(
+            ffmpeg,
+            [
+                "-y",
+                "-i",
+                str(file_path),
+                "-c:v",
+                "libx264",
+                "-preset",
+                "veryfast",
+                "-crf",
+                "20",
+                "-c:a",
+                "aac",
+                "-b:a",
+                "192k",
+                "-movflags",
+                "+faststart",
+                str(converted),
+            ],
+        )
+        if ok and converted.exists():
+            file_path.unlink(missing_ok=True)
+            final_mp4 = file_path.with_suffix(".mp4")
+            if final_mp4.exists():
+                final_mp4.unlink(missing_ok=True)
+            converted.replace(final_mp4)
+            return final_mp4
+        converted.unlink(missing_ok=True)
+        return file_path
+
     def download(
         self,
         request: DownloadRequest,
@@ -261,6 +313,16 @@ class YtDlpService:
                 )
             )
             created = self._ensure_facebook_playable(created, ffmpeg)
+        elif platform == Platform.TIKTOK and request.download_type == DownloadType.VIDEO:
+            emit(
+                ProgressEvent(
+                    job_id=job_id,
+                    status=DownloadStatus.PROCESSING,
+                    percent=99,
+                    message="Optimizando video para maxima compatibilidad...",
+                )
+            )
+            created = self._ensure_h264_aac_mp4(created, ffmpeg)
 
         result = DownloadResult(
             job_id=job_id,
@@ -322,12 +384,19 @@ class YtDlpService:
             )
             return options
 
+        selector = request.format_selector or default_video_selector(facebook_mode=platform == Platform.FACEBOOK)
+        if not ffmpeg:
+            # Without ffmpeg, merged DASH downloads fail; use progressive MP4 fallback.
+            requested_height = self._parse_requested_height(request.resolution)
+            selector = progressive_video_selector(requested_height)
+
         options.update(
             {
-                "format": request.format_selector or default_video_selector(facebook_mode=platform == Platform.FACEBOOK),
-                "merge_output_format": "mp4",
+                "format": selector,
             }
         )
+        if ffmpeg:
+            options["merge_output_format"] = "mp4"
         return options
 
 

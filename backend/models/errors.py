@@ -21,10 +21,11 @@ def humanize_download_error(error: Exception | str) -> str:
         return "Video no disponible en tu region."
     if "network" in lowered or "timed out" in lowered or "connection" in lowered:
         return "Sin conexion a internet o la plataforma no responde."
+    if "ffprobe and ffmpeg not found" in lowered or "ffmpeg is not installed" in lowered:
+        return "Falta ffmpeg en la instalacion. Reinstala VidFlow con el paquete completo."
     if "ffmpeg" in lowered:
         return "Error al procesar el archivo con ffmpeg."
     if "requested format is not available" in lowered:
         return "La calidad seleccionada ya no esta disponible."
 
     return text.strip() or "No se pudo completar la operacion."
-
