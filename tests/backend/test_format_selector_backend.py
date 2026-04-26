@@ -41,9 +41,12 @@ def test_default_selector_avoids_hevc_when_possible():
     selector = default_video_selector(facebook_mode=False)
     assert "vcodec!*=hevc" in selector
     assert "vcodec!*=hvc1" in selector
+    assert "vcodec!*=h265" in selector
+    assert "vcodec!*=dvh1" in selector
 
 
 def test_progressive_selector_uses_mp4_compat_codecs():
     selector = progressive_video_selector(1080)
     assert selector.startswith("best[height<=1080]")
     assert "[acodec^=mp4a]" in selector
+    assert "vcodec!*=h265" in selector

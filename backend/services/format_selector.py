@@ -96,17 +96,17 @@ def _selector_for_height(height: int, *, facebook_mode: bool = False) -> str:
     if facebook_mode:
         return (
             f"best[height<={height}][ext=mp4][vcodec^=avc1][acodec^=mp4a]/"
-            f"best[height<={height}][ext=mp4][vcodec!*=av01][vcodec!*=vp9]/"
+            f"best[height<={height}][ext=mp4][vcodec!*=av01][vcodec!*=vp9][vcodec!*=hvc1][vcodec!*=hev1][vcodec!*=hevc][vcodec!*=h265][vcodec!*=dvh1][vcodec!*=dvhe]/"
             f"best[ext=mp4][vcodec^=avc1][acodec^=mp4a]/"
-            f"best[ext=mp4][vcodec!*=av01][vcodec!*=vp9]/"
+            f"best[ext=mp4][vcodec!*=av01][vcodec!*=vp9][vcodec!*=hvc1][vcodec!*=hev1][vcodec!*=hevc][vcodec!*=h265][vcodec!*=dvh1][vcodec!*=dvhe]/"
             "best"
         )
 
     return (
         f"bestvideo[height<={height}][ext=mp4][vcodec^=avc]+bestaudio[ext=m4a]/"
-        f"bestvideo[height<={height}][ext=mp4][vcodec!*=av01][vcodec!*=vp9][vcodec!*=hvc1][vcodec!*=hev1][vcodec!*=hevc]+bestaudio[ext=m4a]/"
+        f"bestvideo[height<={height}][ext=mp4][vcodec!*=av01][vcodec!*=vp9][vcodec!*=hvc1][vcodec!*=hev1][vcodec!*=hevc][vcodec!*=h265][vcodec!*=dvh1][vcodec!*=dvhe]+bestaudio[ext=m4a]/"
         f"best[height<={height}][ext=mp4][vcodec^=avc1][acodec^=mp4a]/"
-        f"best[height<={height}][ext=mp4][vcodec!*=av01][vcodec!*=vp9][vcodec!*=hvc1][vcodec!*=hev1][vcodec!*=hevc]/"
+        f"best[height<={height}][ext=mp4][acodec^=mp4a][vcodec!*=av01][vcodec!*=vp9][vcodec!*=hvc1][vcodec!*=hev1][vcodec!*=hevc][vcodec!*=h265][vcodec!*=dvh1][vcodec!*=dvhe]/"
         f"bestvideo[height<={height}]+bestaudio/best[height<={height}]/best"
     )
 
@@ -115,15 +115,15 @@ def default_video_selector(*, facebook_mode: bool = False) -> str:
     if facebook_mode:
         return (
             "best[ext=mp4][vcodec^=avc1][acodec^=mp4a]/"
-            "best[ext=mp4][vcodec!*=av01][vcodec!*=vp9]/"
+            "best[ext=mp4][vcodec!*=av01][vcodec!*=vp9][vcodec!*=hvc1][vcodec!*=hev1][vcodec!*=hevc][vcodec!*=h265][vcodec!*=dvh1][vcodec!*=dvhe]/"
             "best"
         )
 
     return (
         "bestvideo[ext=mp4][vcodec^=avc]+bestaudio[ext=m4a]/"
-        "bestvideo[ext=mp4][vcodec!*=av01][vcodec!*=vp9][vcodec!*=hvc1][vcodec!*=hev1][vcodec!*=hevc]+bestaudio[ext=m4a]/"
+        "bestvideo[ext=mp4][vcodec!*=av01][vcodec!*=vp9][vcodec!*=hvc1][vcodec!*=hev1][vcodec!*=hevc][vcodec!*=h265][vcodec!*=dvh1][vcodec!*=dvhe]+bestaudio[ext=m4a]/"
         "best[ext=mp4][vcodec^=avc1][acodec^=mp4a]/"
-        "best[ext=mp4][vcodec!*=av01][vcodec!*=vp9][vcodec!*=hvc1][vcodec!*=hev1][vcodec!*=hevc]/"
+        "best[ext=mp4][acodec^=mp4a][vcodec!*=av01][vcodec!*=vp9][vcodec!*=hvc1][vcodec!*=hev1][vcodec!*=hevc][vcodec!*=h265][vcodec!*=dvh1][vcodec!*=dvhe]/"
         "bestvideo+bestaudio/best"
     )
 
@@ -132,9 +132,9 @@ def progressive_video_selector(height: int | None = None) -> str:
     height_filter = f"[height<={height}]" if height else ""
     return (
         f"best{height_filter}[ext=mp4][vcodec^=avc1][acodec^=mp4a]/"
-        f"best{height_filter}[ext=mp4][vcodec!*=av01][vcodec!*=vp9][vcodec!*=hvc1][vcodec!*=hev1][vcodec!*=hevc]/"
+        f"best{height_filter}[ext=mp4][acodec^=mp4a][vcodec!*=av01][vcodec!*=vp9][vcodec!*=hvc1][vcodec!*=hev1][vcodec!*=hevc][vcodec!*=h265][vcodec!*=dvh1][vcodec!*=dvhe]/"
         f"best[ext=mp4][vcodec^=avc1][acodec^=mp4a]/"
-        f"best[ext=mp4][vcodec!*=av01][vcodec!*=vp9][vcodec!*=hvc1][vcodec!*=hev1][vcodec!*=hevc]/"
+        f"best[ext=mp4][acodec^=mp4a][vcodec!*=av01][vcodec!*=vp9][vcodec!*=hvc1][vcodec!*=hev1][vcodec!*=hevc][vcodec!*=h265][vcodec!*=dvh1][vcodec!*=dvhe]/"
         "best"
     )
 
