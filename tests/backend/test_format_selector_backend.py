@@ -50,3 +50,32 @@ def test_progressive_selector_uses_mp4_compat_codecs():
     assert selector.startswith("best[height<=1080]")
     assert "[acodec^=mp4a]" in selector
     assert "vcodec!*=h265" in selector
+
+
+def test_tiktok_quality_selector_is_strict_h264():
+    raw = {
+        "extractor_key": "TikTok",
+        "formats": [
+            {
+                "format_id": "h265_720p",
+                "ext": "mp4",
+                "height": 720,
+                "vcodec": "hvc1.1.6.L123.B0",
+                "acodec": "mp4a.40.2",
+                "tbr": 1500,
+            },
+            {
+                "format_id": "h264_720p",
+                "ext": "mp4",
+                "height": 720,
+                "vcodec": "avc1.64001F",
+                "acodec": "mp4a.40.2",
+                "tbr": 1200,
+            },
+        ],
+    }
+
+    options = build_quality_options(raw)
+    assert options
+    assert "format_id*=h264" in options[0].selector
+    assert options[0].selector.endswith("[acodec^=mp4a]")

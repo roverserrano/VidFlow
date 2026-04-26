@@ -24,6 +24,7 @@ from backend.services.format_selector import (
     build_quality_options,
     default_video_selector,
     progressive_video_selector,
+    _tiktok_selector_for_height,
 )
 from backend.services.storage_service import ensure_directory, find_created_file
 from backend.utils.filenames import build_download_basename
@@ -384,11 +385,14 @@ class YtDlpService:
             )
             return options
 
-        selector = request.format_selector or default_video_selector(facebook_mode=platform == Platform.FACEBOOK)
+        requested_height = self._parse_requested_height(request.resolution)
+        if platform == Platform.TIKTOK:
+            selector = _tiktok_selector_for_height(requested_height or 2160)
+        else:
+            selector = request.format_selector or default_video_selector(facebook_mode=platform == Platform.FACEBOOK)
         if not ffmpeg:
             # Without ffmpeg, merged DASH downloads fail; use progressive MP4 fallback.
-            requested_height = self._parse_requested_height(request.resolution)
-            selector = progressive_video_selector(requested_height)
+            selector = _tiktok_selector_for_height(requested_height or 2160) if platform == Platform.TIKTOK else progressive_video_selector(requested_height)
 
         options.update(
             {

@@ -92,7 +92,25 @@ def _is_facebook(raw: dict[str, Any]) -> bool:
     return "facebook" in extractor
 
 
-def _selector_for_height(height: int, *, facebook_mode: bool = False) -> str:
+def _is_tiktok(raw: dict[str, Any]) -> bool:
+    extractor = str(raw.get("extractor_key") or raw.get("extractor") or "").lower()
+    return "tiktok" in extractor
+
+
+def _tiktok_selector_for_height(height: int) -> str:
+    return (
+        f"best[height<={height}][ext=mp4][format_id*=h264][acodec^=mp4a]/"
+        f"best[height<={height}][ext=mp4][vcodec^=avc1][acodec^=mp4a]/"
+        f"best[height<={height}][ext=mp4][vcodec^=h264][acodec^=mp4a]/"
+        f"best[ext=mp4][format_id*=h264][acodec^=mp4a]/"
+        "best[ext=mp4][vcodec^=avc1][acodec^=mp4a]"
+    )
+
+
+def _selector_for_height(height: int, *, facebook_mode: bool = False, tiktok_mode: bool = False) -> str:
+    if tiktok_mode:
+        return _tiktok_selector_for_height(height)
+
     if facebook_mode:
         return (
             f"best[height<={height}][ext=mp4][vcodec^=avc1][acodec^=mp4a]/"
@@ -111,7 +129,10 @@ def _selector_for_height(height: int, *, facebook_mode: bool = False) -> str:
     )
 
 
-def default_video_selector(*, facebook_mode: bool = False) -> str:
+def default_video_selector(*, facebook_mode: bool = False, tiktok_mode: bool = False) -> str:
+    if tiktok_mode:
+        return _tiktok_selector_for_height(2160)
+
     if facebook_mode:
         return (
             "best[ext=mp4][vcodec^=avc1][acodec^=mp4a]/"
@@ -142,6 +163,7 @@ def progressive_video_selector(height: int | None = None) -> str:
 def build_quality_options(raw: dict[str, Any]) -> list[FormatOption]:
     formats = raw.get("formats") or []
     facebook_mode = _is_facebook(raw)
+    tiktok_mode = _is_tiktok(raw)
     videos = [item for item in formats if _is_video(item) and _height(item)]
     heights = sorted({_height(item) for item in videos if _height(item)}, reverse=True)
     options: list[FormatOption] = []
@@ -163,7 +185,7 @@ def build_quality_options(raw: dict[str, Any]) -> list[FormatOption]:
             FormatOption(
                 id=f"{height}p",
                 label=" · ".join(label_parts),
-                selector=_selector_for_height(height, facebook_mode=facebook_mode),
+                selector=_selector_for_height(height, facebook_mode=facebook_mode, tiktok_mode=tiktok_mode),
                 resolution=f"{height}p",
                 height=height,
                 fps=fps,
@@ -180,7 +202,7 @@ def build_quality_options(raw: dict[str, Any]) -> list[FormatOption]:
             FormatOption(
                 id="best",
                 label="Mejor calidad disponible",
-                selector=default_video_selector(facebook_mode=facebook_mode),
+                selector=default_video_selector(facebook_mode=facebook_mode, tiktok_mode=tiktok_mode),
                 resolution="best",
             )
         )

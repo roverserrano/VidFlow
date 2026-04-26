@@ -103,3 +103,25 @@ def test_video_download_options_without_ffmpeg_use_progressive_selector():
     assert options["format"].startswith("best[height<=1080]")
     assert "acodec^=mp4a" in options["format"]
     assert "merge_output_format" not in options
+
+
+def test_tiktok_download_options_force_h264_selector():
+    service = YtDlpService()
+    request = DownloadRequest(
+        url="https://www.tiktok.com/@demo/video/123",
+        title="Demo",
+        download_type=DownloadType.VIDEO,
+        resolution="720p",
+        output_dir="/tmp",
+    )
+
+    options = service._download_options(
+        request=request,
+        platform=Platform.TIKTOK,
+        output_template="/tmp/demo.%(ext)s",
+        ffmpeg=None,
+        progress_hook=lambda data: None,
+    )
+
+    assert "format_id*=h264" in options["format"]
+    assert options["format"].startswith("best[height<=720]")
