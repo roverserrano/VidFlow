@@ -9,11 +9,16 @@ const builder = process.platform === "win32"
 const result = spawnSync(builder, process.argv.slice(2), {
   cwd: root,
   stdio: "inherit",
+  shell: process.platform === "win32",
   env: {
     ...process.env,
     ELECTRON_BUILDER_CACHE: path.join(root, ".cache", "electron-builder")
   }
 });
 
-process.exit(result.status ?? 1);
+if (result.error) {
+  console.error("[run-electron-builder] No se pudo ejecutar electron-builder:", result.error.message);
+  process.exit(1);
+}
 
+process.exit(result.status ?? 1);
