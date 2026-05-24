@@ -21,7 +21,7 @@
     "test": "npm run test:backend && npm run test:renderer"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "^4.2.1",
+    "@vitejs/plugin-react": "^5.1.0",
     "electron-updater": "^6.1.8",
     "lucide-react": "^0.468.0",
     "react": "^18.2.0",
