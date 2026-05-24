@@ -32,3 +32,16 @@ npm-debug.log*
 # Sistemas operativos
 .DS_Store
 Thumbs.db
+
+# Android / Gradle
+android/.gradle/
+android/local.properties
+android/**/build/
+
+# Android Studio / IntelliJ
+android/.idea/
+*.iml
+
+# Logs
+*.log
+.codex

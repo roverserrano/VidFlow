@@ -1,146 +1,67 @@
 # VidFlow
 
-VidFlow es una app de escritorio para descargar video o audio desde:
+VidFlow es una aplicación de escritorio para guardar videos o audios desde enlaces públicos de:
 
 - YouTube
 - TikTok
 - Facebook
 
-Esta version ya incluye interfaz moderna y progreso en tiempo real.
+Está pensada para ser simple, rápida y cómoda de usar.
 
-## Descargas listas (usuario final)
+## Descarga
 
-Si solo quieres instalar y usar la app, descarga uno de estos archivos:
+Puedes descargar VidFlow desde estos lanzamientos:
 
-1. **Windows (.exe):**  
-   [Descargar VidFlow.exe](https://github.com/roverserrano/VidFlow/releases/latest/download/VidFlow.exe)
-2. **Linux Debian/Ubuntu (.deb):**  
-   [Descargar VidFlow.deb](https://github.com/roverserrano/VidFlow/releases/latest/download/VidFlow.deb)
-3. **Linux AppImage (portatil):**  
-   [Descargar VidFlow.AppImage](https://github.com/roverserrano/VidFlow/releases/latest/download/VidFlow.AppImage)
-4. **Windows portable (.zip con .exe):**  
-   [Descargar VidFlow-Windows-Portable-0.3.0.zip](https://github.com/roverserrano/VidFlow/releases/latest/download/VidFlow-Windows-Portable-0.3.0.zip)
+- Linux: https://github.com/roverserrano/VidFlow/releases/tag/Linux
+- Windows: https://github.com/roverserrano/VidFlow/releases/tag/Windows
 
-> Nota: estos enlaces funcionan cuando los archivos fueron subidos como **assets** en GitHub Releases con esos mismos nombres.
+## Imagen del software
 
-### Publicar archivos de descarga (mantenedor)
+![Interfaz de VidFlow](https://raw.githubusercontent.com/roverserrano/VidFlow/main/docs/VidFlow/resources/image/VidFlow.png)
 
-1. Ve a `GitHub > VidFlow > Releases > Draft a new release`.
-2. Crea un tag (ejemplo: `v0.3.1`).
-3. Arrastra y suelta estos archivos:
-   - `VidFlow.exe`
-   - `VidFlow.deb`
-   - `VidFlow.AppImage`
-   - `VidFlow-Windows-Portable-0.3.0.zip`
-4. Publica el release.
+Si la imagen no se muestra, puedes verla en la captura compartida en este repositorio.
 
-Desde ese momento, los enlaces de arriba descargarán directamente los instaladores.
+## Qué puedes hacer con VidFlow
 
-### Importante para Windows
+- Pegar un enlace y analizarlo en segundos.
+- Elegir si deseas guardar video o audio.
+- Seleccionar calidad antes de descargar.
+- Ver una vista previa para confirmar que es el contenido correcto.
+- Seguir el avance de la descarga en tiempo real.
+- Revisar tu historial cuando quieras.
 
-- Si descargaste `VidFlow.exe`, ejecuta ese archivo para instalar.
-- Si descargaste el `.zip`, extrae y abre `win-unpacked/VidFlow.exe`.
-- El instalador de Windows debe ser generado en Windows (`npm run package:win`) para incluir correctamente el backend embebido.
-- Si aparece SmartScreen ("Windows protegió su PC"), usa **Mas informacion > Ejecutar de todas formas**.
-- Para eliminar esa advertencia de forma definitiva, la app debe publicarse firmada con certificado de codigo.
+## Cómo usar VidFlow
 
-## Instalacion para personas no tecnicas
+1. Abre la aplicación.
+2. Pega el enlace del contenido.
+3. Presiona **Pegar y analizar** o **Analizar**.
+4. Elige **Video** o **Audio**.
+5. Selecciona la calidad.
+6. Presiona **Descargar**.
 
-### Linux (AppImage)
+## Pantallas principales
 
-1. Descarga `VidFlow.AppImage`.
-2. Dale permiso de ejecucion:
-   ```bash
-   chmod +x VidFlow.AppImage
-   ```
-3. Haz doble clic o ejecútalo.
+- **Descarga**: para analizar enlaces y comenzar la descarga.
+- **Historial**: para ver tus descargas anteriores.
+- **Ajustes**: para personalizar la aplicación.
 
-### Linux (Debian/Ubuntu)
+## Recomendaciones de uso
 
-1. Descarga `VidFlow.deb`.
-2. Da permiso de lectura para evitar warning de `apt`:
-   ```bash
-   chmod 644 ~/Descargas/VidFlow.deb
-   ```
-3. Instala con doble clic o terminal:
-   ```bash
-   sudo apt install ./VidFlow.deb
-   ```
+- Usa enlaces públicos.
+- Verifica siempre la vista previa antes de descargar.
+- Mantén una conexión estable para evitar cortes.
 
-### Windows (Portable)
+## Mensajes y estados
 
-1. Descarga `VidFlow-Windows-Portable-0.3.0.zip`.
-2. Extrae todo el contenido.
-3. Entra a `win-unpacked`.
-4. Ejecuta `VidFlow.exe`.
+VidFlow muestra mensajes claros durante todo el proceso:
 
-### Windows (Instalador .exe)
+- Esperando enlace.
+- Analizando contenido.
+- Descargando.
+- Completado.
+- Error (con aviso para volver a intentar).
 
-1. Descarga `VidFlow.exe`.
-2. Haz doble clic en `VidFlow.exe`.
-3. Sigue el asistente de instalacion.
+## Aviso importante
 
-## Uso basico
-
-1. Abre VidFlow.
-2. Pega una URL de YouTube, TikTok o Facebook.
-3. Pulsa **Pegar y analizar** o **Analizar**.
-4. Elige formato:
-   - Video (MP4)
-   - Audio (MP3/M4A/OGG)
-5. Pulsa **Descargar**.
-
-## Estados y mensajes
-
-- La barra de progreso muestra porcentaje, velocidad y tiempo restante.
-- Al terminar, la app guarda en el historial.
-- Si hay errores, muestra mensajes legibles para reintentar.
-
-## Para desarrollo (equipo tecnico)
-
-### Requisitos
-
-- Python 3.11+
-- Node.js 20+
-- npm
-
-### Ejecutar en local
-
-```bash
-python3 -m venv .venv
-.venv/bin/python -m pip install -r requirements.txt
-npm install
-npm run dev
-```
-
-### Tests
-
-```bash
-npm test
-```
-
-### Builds
-
-Linux:
-
-```bash
-npm run package:linux
-```
-
-Windows (instalador NSIS):
-
-```bash
-npm run package:win
-```
-
-> El build de Windows debe ejecutarse en Windows para evitar instaladores defectuosos.
-
-## Estructura del proyecto (resumen)
-
-```text
-electron/   -> proceso principal, preload e IPC
-renderer/   -> interfaz React
-backend/    -> API local FastAPI + yt-dlp
-resources/  -> iconos, ffmpeg y backend embebido
-dist/       -> artefactos listos para distribuir
-```
+VidFlow está diseñado para uso responsable.  
+Cada persona es responsable de respetar las normas y derechos de autor del contenido que descarga.
